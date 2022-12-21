@@ -24,11 +24,12 @@ Route::post('/reservation/step-two', [FrontendReservationController::class, 'sto
 Route::get('/thankyou', [WelcomeController::class, 'thankyou'])->name('thankyou');
 
 
-
+// jika login diarahkan ke dashboard admin
 Route::get('/admin', function () {
     return view('admin.index');
 })->middleware(['auth'])->name('admin');
 
+// jika register diarahkan ke halaman verify wa
 Route::get('/dashboard', function () {
     return view('auth.verifiy');
 })->middleware(['auth'])->name('dashboard');
