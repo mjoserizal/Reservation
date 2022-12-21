@@ -26,6 +26,17 @@
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
             </div>
 
+            <div class="mt-4">
+                <x-label for="email" :value="__('phone_number')" />
+
+                <x-input id="email" class="block mt-1 w-full @error('phone_number') is-invalid @enderror" type="tel" name="phone_number" :value="old('phone_number')" required autocomplete="phone_number" />
+                @error('phone_number')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
             <!-- Password -->
             <div class="mt-4">
                 <x-label for="password" :value="__('Password')" />
