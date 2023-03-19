@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\MenuController;
-use App\Http\Controllers\Admin\ReservationController;
-use App\Http\Controllers\Admin\TableController;
-use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
-use App\Http\Controllers\Frontend\MenuController as FrontendMenuController;
-use App\Http\Controllers\Frontend\ReservationController as FrontendReservationController;
-use App\Http\Controllers\Frontend\WelcomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\TableController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Frontend\WelcomeController;
+use App\Http\Controllers\Admin\ReservationController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Frontend\MenuController as FrontendMenuController;
+use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
+use App\Http\Controllers\Frontend\ReservationController as FrontendReservationController;
 
 
 Route::get('/', [WelcomeController::class, 'index']);
@@ -22,8 +23,15 @@ Route::get('/reservation/step-two', [FrontendReservationController::class, 'step
 Route::post('/reservation/step-two', [FrontendReservationController::class, 'storeStepTwo'])->name('reservations.store.step.two');
 Route::get('/thankyou', [WelcomeController::class, 'thankyou'])->name('thankyou');
 
+
+// jika login diarahkan ke dashboard admin
+Route::get('/admin', function () {
+    return view('admin.index');
+})->middleware(['auth'])->name('admin');
+
+// jika register diarahkan ke halaman verify wa
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('auth.verifiy');
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(function () {
@@ -33,5 +41,13 @@ Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(fun
     Route::resource('/tables', TableController::class);
     Route::resource('/reservations', ReservationController::class);
 });
+
+
+// twilio
+Route::get('/verify', function () {
+    return view('admin.index');
+})->name('verify');
+
+Route::post('/verify', [App\Http\Controllers\Auth\RegisteredUserController::class, 'verify'])->name('verify');
 
 require __DIR__ . '/auth.php';
